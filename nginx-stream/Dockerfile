@@ -6,3 +6,5 @@ WORKDIR /nginx
 RUN ./auto/configure --with-stream
 RUN make && make install
 CMD ["/usr/local/nginx/sbin/nginx", "-g", "daemon off;"]
+
+#docker run --restart=always -d --net=host -v ${PWD}:nginx.conf:/usr/local/nginx/conf/nginx.conf nginx-stream
