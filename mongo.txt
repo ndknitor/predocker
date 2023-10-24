@@ -1,0 +1,65 @@
+# Cross-cluster
+mongosh --eval "rs.initiate({_id: '<Replica Set>', members: [{_id: 0, host: '<Other Cluster Host>:27017'}]})"
+mongosh --eval "rs.add('<Other Cluster Host>:27017')"
+#Do it repeatly among clusters
+
+
+
+Step 3: Start and Initialize Replica Sets
+
+Start and initialize replica sets for both clusters:
+
+bash
+
+# Start the US cluster
+docker-compose -f docker-compose-us.yml up -d
+
+# Initialize the US replica set
+docker exec -it us-primary mongo --eval "rs.initiate({_id: 'usReplSet', members: [{_id: 0, host: 'us-primary:27017'}, { _id: 1, host: 'us-secondary:27017' }]})"
+
+# Start the UK cluster
+docker-compose -f docker-compose-uk.yml up -d
+
+# Initialize the UK replica set
+docker exec -it uk-primary mongo --eval "rs.initiate({_id: 'ukReplSet', members: [{_id: 0, host: 'uk-primary:27017'}, { _id: 1, host: 'uk-secondary:27017' }]})"
+
+Step 4: Configure Sharding in Both Clusters
+
+In this example, we'll create a sharded database named "mydatabase" with a collection to be sharded. This will be a simplified example of how to configure sharding. In a real-world scenario, you would use sharding keys relevant to your data.
+
+bash
+
+# Connect to the US cluster primary
+docker exec -it us-primary mongo
+
+# Enable sharding for the "mydatabase" database
+sh.enableSharding("mydatabase")
+
+# Create a sharded collection named "mycollection"
+db.createCollection("mycollection")
+sh.shardCollection("mydatabase.mycollection", { _id: "hashed" })
+
+# Exit the MongoDB shell
+
+# Connect to the UK cluster primary
+docker exec -it uk-primary mongo
+
+# Enable sharding for the "mydatabase" database
+sh.enableSharding("mydatabase")
+
+# Create a sharded collection named "mycollection"
+db.createCollection("mycollection")
+sh.shardCollection("mydatabase.mycollection", { _id: "hashed" })
+
+# Exit the MongoDB shell
+
+Step 5: Configure Inter-Cluster Replication
+
+As explained in a previous response, you can configure inter-cluster replication to synchronize data between the US and UK clusters using the rs.add() method in MongoDB. The following example adds the UK cluster's primary node to the US cluster's replica set:
+
+bash
+
+# In the US cluster primary
+docker exec -it us-primary mongo --eval "rs.add('uk-primary:27017')"
+
+And you would perform a similar operation in the UK cluster to add the US cluster's primary node to its replica set.
