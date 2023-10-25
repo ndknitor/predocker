@@ -19,7 +19,7 @@ Vagrant.configure("2") do |config|
       node.vm.provision "shell", inline: <<-SHELL
 
 	sudo apt-get update
-	sudo apt-get install -y openssh-server
+	sudo apt-get install -y openssh-server net-tools
 	
 	echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDPCPNAORR9i8FMfFYndTMui4YkpP2XJT14jSAzGjV1lJoY4CzHOdlIgVeiaFFywtak+6QNltG/NcjOHmJ7luZOEI43mzXgQSF5MuTeWz0G+Nmz1JbcEOYrqXli43zWiFdOScY7VAarrDFvbTMIPMDHTv2iGtexJpwncocQoHz5RJFixhuoIDAfGRKBAmY1m8zo+IrInW8bQmYIuAb/7IMeMzs2+LIEhjC7D+SnnA8DZ9n5JLzlIV5JpXHOCsKgYEQ6R9Z0JxSOOjyn2ZzsZHEeecBen5vTU3sfN6pssR3MCsPrNyceuONe3h0pYkcD2sthcU45HR9Bci/57EnrRyTB vagrant@debian1" >> /home/vagrant/.ssh/authorized_keys
 	echo "-----BEGIN OPENSSH PRIVATE KEY-----
