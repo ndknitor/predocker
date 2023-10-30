@@ -26,3 +26,6 @@ sudo usermod -aG docker ${USER}
 echo "net.bridge.bridge-nf-call-ip6tables=1" | sudo tee -a /etc/sysctl.conf
 echo "net.bridge.bridge-nf-call-iptables=1" | sudo tee -a /etc/sysctl.conf
 sudo sysctl -p
+
+# Use external load balancer
+# kubectl patch svc nodets-service -p '{"spec":{"externalTrafficPolicy":"Local"}}'
