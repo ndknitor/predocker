@@ -9,7 +9,7 @@ sudo swapoff -a
 sudo sed -i '/swap/d' /etc/fstab
 
 # Install necessary packages
-sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common gnupg
 
 # Add Kubernetes repository
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
