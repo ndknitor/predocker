@@ -1,0 +1,11 @@
+version: '3.7'
+services:
+  nodets:
+    image: ndknitor/nodets-template
+    deploy:
+      mode: global
+    ports:
+      - target: 5000
+        published: 5000
+        protocol: tcp
+        mode: host
