@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nodets-template-ingress
+  # spec:
+    # tls:
+    # - secretName: your-tls-secret
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: nodets-template.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nodets-template-service
+            port:
+              number: 80
+
+
+# openssl pkcs12 -export -out your-certificate.pfx -inkey your-private-key.key -in your-certificate.crt
+# kubectl create secret tls your-tls-secret --cert=your-certificate.crt --key=your-private-key.key
