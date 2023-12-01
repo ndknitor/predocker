@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodets-template-deployment
+spec:
+  replicas: 3 
+  selector:
+    matchLabels:
+      app: nodets-template
+  template:
+    metadata:
+      labels:
+        app: nodets-template
+    spec:
+      containers:
+        image: ndknitor/nodets-template
+        ports:
+        - containerPort: 5000
