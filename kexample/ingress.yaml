@@ -7,6 +7,10 @@ metadata:
     # - secretName: your-tls-secret
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
+    #  nginx.ingress.kubernetes.io/affinity: "true" # Enable session affinity
+    #  nginx.ingress.kubernetes.io/affinity-mode: "ip" # IP-based session affinity
+    #  nginx.ingress.kubernetes.io/affinity-type: "ip" # Use client IP for session affinity
+    #  nginx.ingress.kubernetes.io/affinity-avg-latency-type: "wlc" # Use least connection method
 spec:
   rules:
   - host: nodets-template.example.com
