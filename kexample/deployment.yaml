@@ -1,18 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nodets-template-deployment
+  name: asp-template-deployment
 spec:
-  replicas: 3 
+  replicas: 2
   selector:
     matchLabels:
-      app: nodets-template
+      app: asp-template
   template:
     metadata:
       labels:
-        app: nodets-template
+        app: asp-template
     spec:
       containers:
-        image: ndknitor/nodets-template
+      - name: asp-template-container
+        image: ndknitor/asp-template
         ports:
-        - containerPort: 5000
+        - containerPort: 8080
