@@ -1,6 +1,6 @@
 Vagrant.configure("2") do |config|
   # Define a base box for Debian
-  config.vm.box = "debian/buster64"
+  config.vm.box = "debian/bookworm64"
 
   # Loop to create four VMs
   (1..2).each do |i|
@@ -50,8 +50,8 @@ qX5+l3kuS9KkbItZ4hhvs/FrrzuiN/KSOQKwFhcKJ/1PtUykbC3fG/HOZHIXqcJ4AjmiT5
 PyjXR3D0JGk672HHAAAAD3ZhZ3JhbnRAZGViaWFuMQECAw==
 -----END OPENSSH PRIVATE KEY-----" > /home/vagrant/.ssh/id_rsa
 
-
-	echo 'export PATH=$PATH:/sbin' >> /home/vagrant/.bashrc
+	mkdir -p $HOME/.bin
+	echo 'export PATH=$PATH:/sbin:$HOME/.bin' >> /home/vagrant/.bashrc
 	source /home/vagrant/.bashrc
      
       SHELL
