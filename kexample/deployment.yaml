@@ -12,8 +12,23 @@ spec:
       labels:
         app: asp-template
     spec:
+      imagePullSecrets:
+      - name: local-registry-secret
       containers:
       - name: asp-template-container
-        image: ndknitor/asp-template
+        image: debian3:5000/asp-template
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
+      
+     #   volumeMounts:
+     #   - name: host-folder
+     #     mountPath: /path/in/container
+     # volumes:
+     # - name: host-folder
+     #   hostPath:
+     #     path: /path/on/host
+      
+        # env:
+        # - name: ASPNETCORE_ENVIRONMENT
+        #  value: "Production"
