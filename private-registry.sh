@@ -16,3 +16,18 @@ docker run -d -p 5000:5000 \
   -e "REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm" \
   -e "REGISTRY_AUTH_HTPASSWD_PATH=/etc/docker/registry/htpasswd" \
   registry:2
+
+
+
+
+
+docker run -d -p 5000:5000 \
+    --restart=always \
+    --name registry \
+    -v /home/vagrant/registry/certs:/certs \
+    -v /home/vagrant/registry/config.yml:/etc/docker/registry/config.yml \
+    -v /home/vagrant/registry/htpasswd:/etc/docker/registry/htpasswd \
+    -e "REGISTRY_AUTH=htpasswd" \
+    -e "REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm" \
+    -e "REGISTRY_AUTH_HTPASSWD_PATH=/etc/docker/registry/htpasswd" \
+    registry:2
