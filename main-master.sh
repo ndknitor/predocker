@@ -7,7 +7,7 @@ swapoff -a \
     &&  cp -f /etc/fstab /etc/fstab.bak \
     &&  sed -e '/swap/ s/^#*/#/' -i /etc/fstab
 
- apt-get update &&  app -y upgrade
+ apt-get update &&  apt -y upgrade
 
  apt-get install -y \
     apt-transport-https \
