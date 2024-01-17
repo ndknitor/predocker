@@ -23,6 +23,11 @@ echo \
  apt-get update
  apt-get install -y containerd.io
 
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+sudo sh -c 'echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kubernetes.list'
+sudo apt update
+sudo apt-get install -y kubelet kubeadm kubectl
+
 cat <<EOF |  tee /etc/modules-load.d/k8s.conf
 overlay
 br_netfilter
