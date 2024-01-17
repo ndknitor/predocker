@@ -1,28 +1,25 @@
 Vagrant.configure("2") do |config|
-  # Define a base box for Debian
   config.vm.box = "debian/bookworm64"
 
-  # Loop to create four VMs
-  (1..2).each do |i|
+  (1..3).each do |i|
     config.vm.define "debian#{i}" do |node|
       # Set the hostname and VM name
       node.vm.hostname = "debian#{i}"
       node.vm.provider "virtualbox" do |vb|
-        vb.memory = 1024
-        vb.cpus = 1
+        vb.memory = 4096
+        vb.cpus = 2
       end
 
-      # Create a private network to allow VMs to communicate
-      node.vm.network "private_network", type: "dhcp"
+      #node.vm.network "private_network", type: "dhcp" 
+      node.vm.network "private_network", type: "static", ip: "192.168.56.1#{i}"
 
-      # Shell provisioning to update the system and install SSH
       node.vm.provision "shell", inline: <<-SHELL
 
-	sudo apt-get update
-	sudo apt-get install -y openssh-server net-tools
-	
-	echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDPCPNAORR9i8FMfFYndTMui4YkpP2XJT14jSAzGjV1lJoY4CzHOdlIgVeiaFFywtak+6QNltG/NcjOHmJ7luZOEI43mzXgQSF5MuTeWz0G+Nmz1JbcEOYrqXli43zWiFdOScY7VAarrDFvbTMIPMDHTv2iGtexJpwncocQoHz5RJFixhuoIDAfGRKBAmY1m8zo+IrInW8bQmYIuAb/7IMeMzs2+LIEhjC7D+SnnA8DZ9n5JLzlIV5JpXHOCsKgYEQ6R9Z0JxSOOjyn2ZzsZHEeecBen5vTU3sfN6pssR3MCsPrNyceuONe3h0pYkcD2sthcU45HR9Bci/57EnrRyTB vagrant@debian1" >> /home/vagrant/.ssh/authorized_keys
-	echo "-----BEGIN OPENSSH PRIVATE KEY-----
+        sudo apt-get update
+        sudo apt-get install -y openssh-server net-tools
+
+        echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDPCPNAORR9i8FMfFYndTMui4YkpP2XJT14jSAzGjV1lJoY4CzHOdlIgVeiaFFywtak+6QNltG/NcjOHmJ7luZOEI43mzXgQSF5MuTeWz0G+Nmz1JbcEOYrqXli43zWiFdOScY7VAarrDFvbTMIPMDHTv2iGtexJpwncocQoHz5RJFixhuoIDAfGRKBAmY1m8zo+IrInW8bQmYIuAb/7IMeMzs2+LIEhjC7D+SnnA8DZ9n5JLzlIV5JpXHOCsKgYEQ6R9Z0JxSOOjyn2ZzsZHEeecBen5vTU3sfN6pssR3MCsPrNyceuONe3h0pYkcD2sthcU45HR9Bci/57EnrRyTB vagrant@debian1" >> /home/vagrant/.ssh/authorized_keys
+        echo "-----BEGIN OPENSSH PRIVATE KEY-----
 b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAABFwAAAAdzc2gtcn
 NhAAAAAwEAAQAAAQEAzwjzQDkUfYvBTHxWJ3UzLouGJKT9lyU9eI0gMxo1dZSaGOAsxznZ
 SIFXomhRcsLWpPukDZbRvzXIzh5ie5bmThCON5s14EEheTLk3ls9BvjZs9SW3BDmK6l5Yu
@@ -50,9 +47,9 @@ qX5+l3kuS9KkbItZ4hhvs/FrrzuiN/KSOQKwFhcKJ/1PtUykbC3fG/HOZHIXqcJ4AjmiT5
 PyjXR3D0JGk672HHAAAAD3ZhZ3JhbnRAZGViaWFuMQECAw==
 -----END OPENSSH PRIVATE KEY-----" > /home/vagrant/.ssh/id_rsa
 
-	mkdir -p $HOME/.bin
-	echo 'export PATH=$PATH:/sbin:$HOME/.bin' >> /home/vagrant/.bashrc
-	source /home/vagrant/.bashrc
+        mkdir -p $HOME/.bin
+        echo 'export PATH=$PATH:/sbin:$HOME/.bin' >> /home/vagrant/.bashrc
+        source /home/vagrant/.bashrc
      
       SHELL
     end
