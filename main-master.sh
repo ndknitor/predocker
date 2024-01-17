@@ -3,18 +3,12 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
+apt-get update &&  apt -y upgrade
+apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release
+
 swapoff -a \
     &&  cp -f /etc/fstab /etc/fstab.bak \
     &&  sed -e '/swap/ s/^#*/#/' -i /etc/fstab
-
- apt-get update &&  apt -y upgrade
-
- apt-get install -y \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    gnupg \
-    lsb-release
 
 curl -fsSL https://download.docker.com/linux/debian/gpg |  gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 echo \
@@ -23,19 +17,16 @@ echo \
  apt-get update
  apt-get install -y containerd.io
 
-
 curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
 apt-get update
 apt-get install -y kubelet kubeadm kubectl
 apt-mark hold kubelet kubeadm kubectl
 
-
 cat <<EOF |  tee /etc/modules-load.d/k8s.conf
 overlay
 br_netfilter
 EOF
-
 modprobe overlay
 modprobe br_netfilter
 
@@ -50,6 +41,5 @@ mkdir -p /etc/containerd
 containerd config default |  tee /etc/containerd/config.toml
 sed -i 's/            SystemdCgroup = false/            SystemdCgroup = true/' /etc/containerd/config.toml
 systemctl restart containerd
-
 
 kubeadm init --pod-network-cidr=10.244.0.0/16
