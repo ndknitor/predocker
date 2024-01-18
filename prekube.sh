@@ -35,4 +35,9 @@ sudo apt-get install helm
 #Setup Nginx as external load balancer
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 helm repo update
+
+kubectl get ingressclass nginx
+kubectl delete ingressclass nginx
+helm install nginx-ingress ingress-nginx/ingress-nginx
+
 helm install nginx-ingress ingress-nginx/ingress-nginx
