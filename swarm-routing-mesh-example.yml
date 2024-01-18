@@ -1,11 +1,13 @@
 version: '3.7'
 services:
   nodets:
-    image: ndknitor/nodets-template
+    image: ndknitor/asp-template
     deploy:
       mode: global
     ports:
-      - target: 5000
-        published: 5000
+      - target: 8080
+        published: 8080
         protocol: tcp
         mode: host
+        
+# docker stack deploy -c docker-compose.yml asp-template-service
