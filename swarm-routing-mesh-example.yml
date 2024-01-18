@@ -11,3 +11,4 @@ services:
         mode: host
         
 # docker stack deploy -c docker-compose.yml asp-template-service
+# docker service update --image ndknitor/asp-template asp-template-service
