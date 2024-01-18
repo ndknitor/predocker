@@ -11,7 +11,7 @@ Vagrant.configure("2") do |config|
       end
 
       #node.vm.network "private_network", type: "dhcp" 
-      node.vm.network "private_network", type: "static", ip: "192.168.56.#{i + 1}"
+      node.vm.network "private_network", type: "static", ip: "192.168.56.#{i + 100}"
 
       node.vm.provision "shell", inline: <<-SHELL
 
