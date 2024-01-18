@@ -20,16 +20,20 @@ docker run -d -p 5000:5000 \
 
 
 mkdir certs
-openssl req -newkey rsa:4096 -nodes -sha256 -keyout certs/domain.key -x509 -days 365 -out certs/domain.crt
-
-
+openssl req -newkey rsa:4096 -nodes -sha256 -keyout certs/registry.key -x509 -days 365 -out certs/registry.crt
 docker run -d -p 5000:5000 \
     --restart=always \
     --name registry \
-    -v /home/vagrant/registry/certs:/certs \
-    -v /home/vagrant/registry/config.yml:/etc/docker/registry/config.yml \
-    -v /home/vagrant/registry/htpasswd:/etc/docker/registry/htpasswd \
+    -v $(pwd)/certs:/certs \
+    -v $(pwd)/config.yml:/etc/docker/registry/config.yml \
+    -v $(pwd)//htpasswd:/etc/docker/registry/htpasswd \
     -e "REGISTRY_AUTH=htpasswd" \
     -e "REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm" \
     -e "REGISTRY_AUTH_HTPASSWD_PATH=/etc/docker/registry/htpasswd" \
     registry:2
+    
+sudo mkdir -p /etc/docker/
+{
+  "insecure-registries" : ["registry.local.doc:5000"]
+}
+ /etc/docker/daemon.json
