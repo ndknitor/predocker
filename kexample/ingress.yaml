@@ -2,9 +2,9 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: nodets-template-ingress
-  # spec:
-    # tls:
-    # - secretName: your-tls-secret
+spec:
+  tls:
+  - secretName: your-tls-secret
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
     #  nginx.ingress.kubernetes.io/affinity: "true" # Enable session affinity
@@ -13,7 +13,7 @@ metadata:
     #  nginx.ingress.kubernetes.io/affinity-avg-latency-type: "wlc" # Use least connection method
 spec:
   rules:
-  - host: asp-template.com
+  - host: asptemplate.com
     http:
       paths:
       - path: /
@@ -24,6 +24,5 @@ spec:
             port:
               number: 8080
 
-
-# openssl pkcs12 -export -out your-certificate.pfx -inkey your-private-key.key -in your-certificate.crt
+# openssl req -x509 -nodes -newkey rsa:2048 -keyout key.key -out cert.crt -days 365
 # kubectl create secret tls your-tls-secret --cert=your-certificate.crt --key=your-private-key.key
