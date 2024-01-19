@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: asp-template-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: asp-template
+  template:
+    metadata:
+      labels:
+        app: asp-template
+    spec:
+      containers:
+      - name: asp-template-container
+        image: ndknitor/asp-template
+        ports:
+        - containerPort: 8080 # Container port
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: asp-template-service
+spec:
+  selector:
+    app: asp-template
+  ports:
+    - protocol: TCP
+      port: 8080 # Container port
+      # nodePort: 30000
+      # targetPort: 8080
+  type: ClusterIP
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: asp-template-ingress
+  # spec:
+    # tls:
+    # - secretName: your-tls-secret
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    #  nginx.ingress.kubernetes.io/affinity: "true" # Enable session affinity
+    #  nginx.ingress.kubernetes.io/affinity-mode: "ip" # IP-based session affinity
+    #  nginx.ingress.kubernetes.io/affinity-type: "ip" # Use client IP for session affinity
+    #  nginx.ingress.kubernetes.io/affinity-avg-latency-type: "wlc" # Use least connection method
+spec:
+  rules:
+  - host: asp-template.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: asp-template-service
+            port:
+              number: 8080 # Container port
