@@ -40,9 +40,6 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: asp-template-ingress
-  # spec:
-    # tls:
-    # - secretName: your-tls-secret
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
     #  nginx.ingress.kubernetes.io/affinity: "true" # Enable session affinity
@@ -50,6 +47,8 @@ metadata:
     #  nginx.ingress.kubernetes.io/affinity-type: "ip" # Use client IP for session affinity
     #  nginx.ingress.kubernetes.io/affinity-avg-latency-type: "wlc" # Use least connection method
 spec:
+  #tls:
+  #- secretName: your-tls-secret
   rules:
   - host: asp-template.com
     http:
