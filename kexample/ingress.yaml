@@ -13,16 +13,16 @@ metadata:
     #  nginx.ingress.kubernetes.io/affinity-avg-latency-type: "wlc" # Use least connection method
 spec:
   rules:
-  - host: nodets-template.example.com
+  - host: asp-template.com
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: nodets-template-service
+            name: asp-template-service
             port:
-              number: 80
+              number: 8080
 
 
 # openssl pkcs12 -export -out your-certificate.pfx -inkey your-private-key.key -in your-certificate.crt
