@@ -9,6 +9,10 @@ services:
         published: 8080
         protocol: tcp
         mode: host
-        
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ANOTHER_VARIABLE=another_value
+    volumes:
+      - ~/logs:/app/logs
 # docker stack deploy -c docker-compose.yml asp-template-service
 # docker service update --image ndknitor/asp-template asp-template-service
