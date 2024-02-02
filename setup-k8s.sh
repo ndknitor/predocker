@@ -40,4 +40,4 @@ containerd config default |  tee /etc/containerd/config.toml
 sed -i 's/            SystemdCgroup = false/            SystemdCgroup = true/' /etc/containerd/config.toml
 systemctl restart containerd
 
-kubeadm init --pod-network-cidr=10.244.0.0/16
+echo "This script won't run init command because it can be "
