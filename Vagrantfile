@@ -5,13 +5,13 @@ Vagrant.configure("2") do |config|
     config.vm.define "debian#{i}" do |node|
       # Set the hostname and VM name
       node.vm.hostname = "debian#{i}"
-      node.vm.provider "virtualbox" do |vb|
-        vb.memory = 4096
-        vb.cpus = 2
+      node.vm.provider "libvirt" do |libvirt|
+        libvirt.memory = 1024
+        libvirt.cpus = 1
       end
 
       #node.vm.network "private_network", type: "dhcp" 
-      node.vm.network "private_network", type: "static", ip: "192.168.56.#{i + 100}"
+      node.vm.network "private_network", type: "static", ip: "192.168.122.#{i + 100}"
 
       node.vm.provision "shell", inline: <<-SHELL
 
@@ -46,7 +46,7 @@ dhcm8sDSPWYnbPlxQaBKchUL3uVfRhUQpODPyGk4Jfu0eNxTcAAACBANI5E+WV9WSDandC
 qX5+l3kuS9KkbItZ4hhvs/FrrzuiN/KSOQKwFhcKJ/1PtUykbC3fG/HOZHIXqcJ4AjmiT5
 PyjXR3D0JGk672HHAAAAD3ZhZ3JhbnRAZGViaWFuMQECAw==
 -----END OPENSSH PRIVATE KEY-----" > /home/vagrant/.ssh/id_rsa
-
+        
         mkdir -p $HOME/.bin
         echo 'export PATH=$PATH:/sbin:$HOME/.bin' >> /home/vagrant/.bashrc
         source /home/vagrant/.bashrc
