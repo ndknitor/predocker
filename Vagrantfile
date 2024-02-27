@@ -1,3 +1,4 @@
+# vagrant plugin install vagrant-libvirt
 Vagrant.configure("2") do |config|
   config.vm.box = "debian/bookworm64"
 
