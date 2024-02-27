@@ -3,7 +3,7 @@ Vagrant.configure("2") do |config|
   config.vm.box = "debian/bookworm64"
 
   (1..3).each do |i|
-    config.vm.define "debian#{i}" do |node|
+    config.vm.define "d#{i}" do |node|
       # Set the hostname and VM name
       node.vm.hostname = "debian#{i}"
       node.vm.provider "libvirt" do |libvirt|
@@ -19,33 +19,22 @@ Vagrant.configure("2") do |config|
         sudo apt-get update
         sudo apt-get install -y openssh-server net-tools
 
-        echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDPCPNAORR9i8FMfFYndTMui4YkpP2XJT14jSAzGjV1lJoY4CzHOdlIgVeiaFFywtak+6QNltG/NcjOHmJ7luZOEI43mzXgQSF5MuTeWz0G+Nmz1JbcEOYrqXli43zWiFdOScY7VAarrDFvbTMIPMDHTv2iGtexJpwncocQoHz5RJFixhuoIDAfGRKBAmY1m8zo+IrInW8bQmYIuAb/7IMeMzs2+LIEhjC7D+SnnA8DZ9n5JLzlIV5JpXHOCsKgYEQ6R9Z0JxSOOjyn2ZzsZHEeecBen5vTU3sfN6pssR3MCsPrNyceuONe3h0pYkcD2sthcU45HR9Bci/57EnrRyTB vagrant@debian1" >> /home/vagrant/.ssh/authorized_keys
+        echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAgQDVqQbPFNqxA9+pMx5vGayek6KmDru+ZCKK+uckQVL0TRt7Tms6DdtRSyRovQdV8Ey4kBq3wYWyX/qWbq20V338f4qK8h/q3L3lkcxQEwtUYT6WVbW51ZEPmUs0sGrFjErvaaXEwAqlVz4K9PG3JBzgRp4WgytBddo42P+69gQXTQ== kn@ndkn" >> /home/vagrant/.ssh/authorized_keys
         echo "-----BEGIN OPENSSH PRIVATE KEY-----
-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
+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
+AwJW3pTh3ZUiVk5W89AAAAB2tuQG5ka24BAgM=
 -----END OPENSSH PRIVATE KEY-----" > /home/vagrant/.ssh/id_rsa
         
         mkdir -p $HOME/.bin
