@@ -1,3 +1,4 @@
+# curl https://raw.githubusercontent.com/ndknitor/predocker/main/rke-boostrap.sh | bash
 #Disable swap
 sudo swapoff -a
 sudo cp -f /etc/fstab /etc/fstab.bak
