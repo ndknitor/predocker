@@ -2,7 +2,7 @@ sudo swapoff -a \
     && sudo cp -f /etc/fstab /etc/fstab.bak \
     && sudo sed -e '/swap/ s/^#*/#/' -i /etc/fstab
     
-sudo apt-get update && sudo app -y upgrade
+sudo apt-get update && sudo apt -y upgrade
 
 sudo apt-get install -y \
     apt-transport-https \
