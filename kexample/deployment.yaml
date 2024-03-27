@@ -20,6 +20,20 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
+
+
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          failureThreshold: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+
       
      #   volumeMounts:
      #   - name: host-folder
