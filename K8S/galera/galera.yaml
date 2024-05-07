@@ -27,11 +27,12 @@ spec:
     nodePort: 30000
     name: mysql
   type: NodePort
+  externalTrafficPolicy: Local  
   selector:
     app: galera-ss
 
----
 
+---
 
 
 apiVersion: apps/v1
