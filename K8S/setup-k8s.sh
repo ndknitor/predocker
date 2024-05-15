@@ -1,6 +1,23 @@
+ask_master_node() {
+    while true; do
+        read -p "Is this a master node? (Y/n): " yn
+        case $yn in
+            [Yy]* ) return 0;;
+            [Nn]* ) return 1;;
+            "" ) return 0;;
+            * ) echo "Please answer Y/y for yes or N/n for no.";;
+        esac
+    done
+}
+
 if [[ $EUID -ne 0 ]]; then
   echo "This script must be run as root."
   exit 1
+fi
+
+is_master_node=false
+if ask_master_node; then
+    is_master_node=true
 fi
 
 apt-get update &&  apt -y upgrade
@@ -18,9 +35,13 @@ apt-get install -y containerd.io
 curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
 apt-get update
-apt-get install -y kubelet kubeadm kubectl
-apt-mark hold kubelet kubeadm kubectl
-
+if [ "$is_master_node" = true ]; then
+    apt-get install -y kubeadm
+    apt-mark hold kubeadm
+else
+    apt-get install -y kubelet
+    apt-mark hold kubelet
+fi
 cat <<EOF |  tee /etc/modules-load.d/k8s.conf
 overlay
 br_netfilter
@@ -40,5 +61,7 @@ containerd config default |  tee /etc/containerd/config.toml
 sed -i 's/            SystemdCgroup = false/            SystemdCgroup = true/' /etc/containerd/config.toml
 systemctl restart containerd
 
-echo "This script won't run init command because it can be used to boostrap the worker node, if this is the master node, run this command:"
-echo "sudo kubeadm init --pod-network-cidr=10.244.0.0/16"
+if [ "$is_master_node" = true ]; then
+  echo "This script won't run init command because you should be the one who run it, just run this command and customize pod's CIDR as your requirments:"
+  echo "sudo kubeadm init --pod-network-cidr=10.244.0.0/16"
+else
