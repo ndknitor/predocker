@@ -39,8 +39,8 @@ if [ "$is_master_node" = true ]; then
     apt-get install -y kubeadm
     apt-mark hold kubeadm
 else
-    apt-get install -y kubelet
-    apt-mark hold kubelet
+    apt-get install -y kubeadm kubelet
+    apt-mark hold kubeadm kubelet
 fi
 cat <<EOF |  tee /etc/modules-load.d/k8s.conf
 overlay
