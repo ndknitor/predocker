@@ -1,4 +1,4 @@
-# sudo ./etcd-setup.sh etcd1 10.0.0.1 etcd1=http://10.0.0.1:2380,etcd2=http://10.0.0.2:2380,etcd3=http://10.0.0.3:2380 etcd-token new
+# sudo ./etcd-setup.sh etcd1 10.0.0.1 etcd1=https://10.0.0.1:2380,etcd2=https://10.0.0.2:2380,etcd3=https://10.0.0.3:2380 etcd-token
 
 if [[ $EUID -ne 0 ]]; then
   echo "This script must be run as root."
@@ -14,19 +14,15 @@ NAME=$1
 IP=$2
 INITIAL_CLUSTER=$3
 TOKEN=$4
-NAME=$1
-IP=$2
-INITIAL_CLUSTER=$3
-TOKEN=$4
 
 # Set CLUSTER_STATE to "new" if not provided
 CLUSTER_STATE=${5:-existing}
 
 if [ ! -f "/usr/local/bin/etcd" ]; then
-  wget https://github.com/etcd-io/etcd/releases/download/v3.5.2/etcd-v3.5.2-linux-amd64.tar.gz -P /tmp
-  tar -xvf /tmp/etcd-v3.5.2-linux-amd64.tar.gz
-  mv /tmp/etcd-v3.5.2-linux-amd64/etcd /usr/local/bin/
-  mv /tmp/etcd-v3.5.2-linux-amd64/etcdctl /usr/local/bin/
+  wget https://github.com/etcd-io/etcd/releases/download/v3.5.13/etcd-v3.5.13-linux-amd64.tar.gz -P /tmp
+  tar -xvf /tmp/etcd-v3.5.13-linux-amd64.tar.gz
+  mv /tmp/etcd-v3.5.13-linux-amd64/etcd /usr/local/bin/
+  mv /tmp/etcd-v3.5.13-linux-amd64/etcdctl /usr/local/bin/
 fi
 
 sudo groupadd --system etcd
@@ -35,17 +31,6 @@ mkdir -p /var/lib/etcd
 chown -R etcd:etcd /var/lib/etcd
 mkdir -p /etc/etcd
 chown -R etcd:etcd /etc/etcd
-
-echo "
-name: $NAME
-data-dir: /var/lib/etcd
-listen-peer-urls: http://$IP:2380
-listen-client-urls: http://$IP:2379
-initial-advertise-peer-urls: http://$IP:2380
-advertise-client-urls: http://$IP:2379
-initial-cluster: $INITIAL_CLUSTER
-initial-cluster-token: $TOKEN
-initial-cluster-state: $CLUSTER_STATE" > /etc/etcd/etcd.conf.yml
 
 echo "
 [Unit]
@@ -57,7 +42,24 @@ After=network.target
 User=etcd
 Group=etcd
 Type=notify
-ExecStart=/usr/local/bin/etcd --config-file=/etc/etcd/etcd.conf.yml
+ExecStart=/usr/local/bin/etcd /usr/local/bin/etcd \
+  --name $NAME \
+  --cert-file=/etc/etcd/etcd.pem \
+  --key-file=/etc/etcd/etcd-key.pem \
+  --peer-cert-file=/etc/etcd/etcd.pem \
+  --peer-key-file=/etc/etcd/etcd-key.pem \
+  --trusted-ca-file=/etc/etcd/ca.pem \
+  --peer-trusted-ca-file=/etc/etcd/ca.pem \
+  --peer-client-cert-auth \
+  --client-cert-auth \
+  --initial-advertise-peer-urls https://$IP:2380 \
+  --listen-peer-urls https://$IP:2380 \
+  --advertise-client-urls https://$IP:2379 \
+  --listen-client-urls https://$IP:2379,https://127.0.0.1:2379 \
+  --initial-cluster-token $TOKEN \
+  --initial-cluster $INITIAL_CLUSTER \
+  --initial-cluster-state $CLUSTER_STATE
+
 Restart=on-failure
 LimitNOFILE=40000
 ProtectSystem=full
