@@ -20,7 +20,7 @@ CLUSTER_STATE=${5:-existing}
 
 if [ ! -f "/usr/local/bin/etcd" ]; then
   wget https://github.com/etcd-io/etcd/releases/download/v3.5.13/etcd-v3.5.13-linux-amd64.tar.gz -P /tmp
-  tar -xvf /tmp/etcd-v3.5.13-linux-amd64.tar.gz
+  tar -xvf /tmp/etcd-v3.5.13-linux-amd64.tar.gz -C /tmp
   mv /tmp/etcd-v3.5.13-linux-amd64/etcd /usr/local/bin/
   mv /tmp/etcd-v3.5.13-linux-amd64/etcdctl /usr/local/bin/
 fi
