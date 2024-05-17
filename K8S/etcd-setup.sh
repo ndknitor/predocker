@@ -1,4 +1,4 @@
-# sudo ./etcd-setup.sh etcd1 10.0.0.1 etcd1=https://10.0.0.1:2380,etcd2=https://10.0.0.2:2380,etcd3=https://10.0.0.3:2380 etcd-token
+# sudo ./etcd-setup.sh etcd1 10.0.0.1 etcd1=https://10.0.0.1:2380,etcd2=https://10.0.0.2:2380,etcd3=https://10.0.0.3:2380 etcd-token new
 
 if [[ $EUID -ne 0 ]]; then
   echo "This script must be run as root."
@@ -42,7 +42,7 @@ After=network.target
 User=etcd
 Group=etcd
 Type=notify
-ExecStart=/usr/local/bin/etcd /usr/local/bin/etcd \
+ExecStart=/usr/local/bin/etcd \
   --name $NAME \
   --cert-file=/etc/etcd/etcd.pem \
   --key-file=/etc/etcd/etcd-key.pem \
