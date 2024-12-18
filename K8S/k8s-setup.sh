@@ -62,6 +62,7 @@ sed -i 's/            SystemdCgroup = false/            SystemdCgroup = true/' /
 systemctl restart containerd
 
 # kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+# kubeadm init --apiserver-advertise-address=<eth1-ip> --apiserver-cert-extra-sans=<eth1-ip>
 
 if [ "$is_master_node" = true ]; then
   echo "This script won't run init command because you should be the one who run it, just run this command and customize pod's CIDR as your requirments:"
