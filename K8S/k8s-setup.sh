@@ -61,6 +61,8 @@ containerd config default |  tee /etc/containerd/config.toml
 sed -i 's/            SystemdCgroup = false/            SystemdCgroup = true/' /etc/containerd/config.toml
 systemctl restart containerd
 
+# kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+
 if [ "$is_master_node" = true ]; then
   echo "This script won't run init command because you should be the one who run it, just run this command and customize pod's CIDR as your requirments:"
   echo "sudo kubeadm init --pod-network-cidr=10.244.0.0/16"
