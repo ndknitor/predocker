@@ -66,5 +66,7 @@ systemctl restart containerd
 
 if [ "$is_master_node" = true ]; then
   echo "This script won't run init command because you should be the one who run it, just run this command and customize pod's CIDR as your requirments:"
-  echo "sudo kubeadm init --pod-network-cidr=10.244.0.0/16"
+  echo "sudo kubeadm init --apiserver-advertise-address=<ip-address> --pod-network-cidr=10.244.0.0/16"
 else
+
+echo "Print join node command: kubeadm token create --print-join-command"
