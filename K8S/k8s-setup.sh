@@ -37,7 +37,7 @@ echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.
 apt-get update
 if [ "$is_master_node" = true ]; then
     apt-get install -y kubeadm
-    apt-mark hold kubeadm
+    apt-mark hold kubeadm kubelet
 else
     apt-get install -y kubeadm kubelet
     apt-mark hold kubeadm kubelet
