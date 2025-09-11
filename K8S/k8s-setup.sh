@@ -1,3 +1,12 @@
+# Print join command: kubeadm token create --print-join-command
+# Join worker: kubeadm join <ip>:6443 --token <token> --discovery-token-ca-cert-hash sha256:<hash>
+# Join master: kubeadm join <ip>:6443 --token <token> --discovery-token-ca-cert-hash sha256:<hash> --controll-plane
+
+# Drain node: kubectl drain <node-name> --delete-emptydir-data --force --ignore-daemonsets
+# Delete node: kubectl delete node <node-name>
+# Stop k8s service on node: kubeadm reset
+
+
 ask_master_node() {
     while true; do
         read -p "Is this a master node? (Y/n): " yn
@@ -57,12 +66,7 @@ containerd config default |  tee /etc/containerd/config.toml
 sed -i 's/            SystemdCgroup = false/            SystemdCgroup = true/' /etc/containerd/config.toml
 systemctl restart containerd
 
-# kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
-# kubeadm init --apiserver-advertise-address=<eth1-ip> --apiserver-cert-extra-sans=<eth1-ip>
-
 if [ "$is_master_node" = true ]; then
   echo "This script won't run init command because you should be the one who run it, just run this command and customize pod's CIDR as your requirments:"
   echo "sudo kubeadm init --apiserver-advertise-address=<ip-address> --pod-network-cidr=10.244.0.0/16"
 fi
-
-echo "Print join node command: kubeadm token create --print-join-command"
