@@ -1,6 +1,6 @@
 # Print join command: kubeadm token create --print-join-command
 # Join worker: kubeadm join <ip>:6443 --token <token> --discovery-token-ca-cert-hash sha256:<hash>
-# Join master: kubeadm join <ip>:6443 --token <token> --discovery-token-ca-cert-hash sha256:<hash> --controll-plane
+# Join master: kubeadm join <ip>:6443 --token <token> --discovery-token-ca-cert-hash sha256:<hash> --control-plane
 
 # Drain node: kubectl drain <node-name> --delete-emptydir-data --force --ignore-daemonsets
 # Delete node: kubectl delete node <node-name>
