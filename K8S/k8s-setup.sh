@@ -32,7 +32,6 @@ fi
 
 
 node_ip=$(get_ip_from_iface $NETWORK_INTERFACE)
-echo "KUBELET_EXTRA_ARGS=\"--node-ip=$node_ip\"" > /etc/default/kubelet
 
 apt-get update &&  apt -y upgrade
 apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release
@@ -51,6 +50,8 @@ echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.
 apt-get update
 apt-get install -y kubeadm kubelet
 apt-mark hold kubeadm kubelet
+
+echo "KUBELET_EXTRA_ARGS=\"--node-ip=$node_ip\"" > /etc/default/kubelet
 
 cat <<EOF |  tee /etc/modules-load.d/k8s.conf
 overlay
