@@ -8,6 +8,7 @@
 # Delete node: kubectl delete node <node-name>
 # Stop k8s service on node: kubeadm reset
 
+NETWORK_INTERFACE=eth1
 
 ask_master_node() {
     while true; do
@@ -21,15 +22,30 @@ ask_master_node() {
     done
 }
 
+get_ip_from_iface() {
+    local iface="$1"
+
+    if [[ -z "$iface" ]]; then
+        echo "Usage: get_ip_from_iface <interface>"
+        return 1
+    fi
+
+    # Get the first IPv4 address assigned to the interface
+    ip addr show "$iface" 2>/dev/null \
+        | awk '/inet / {print $2}' \
+        | cut -d/ -f1 \
+        | head -n1
+}
+
 if [[ $EUID -ne 0 ]]; then
   echo "This script must be run as root."
   exit 1
 fi
 
-is_master_node=false
-if ask_master_node; then
-    is_master_node=true
-fi
+
+node_ip=get_ip_from_iface
+
+echo 'KUBELET_EXTRA_ARGS="--node-ip=$node_ip"' | sudo tee /etc/default/kubelet
 
 apt-get update &&  apt -y upgrade
 apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release
@@ -68,7 +84,5 @@ containerd config default |  tee /etc/containerd/config.toml
 sed -i 's/            SystemdCgroup = false/            SystemdCgroup = true/' /etc/containerd/config.toml
 systemctl restart containerd
 
-if [ "$is_master_node" = true ]; then
-  echo "This script won't run init command because you should be the one who run it, just run this command and customize pod's CIDR as your requirments:"
-  echo "sudo kubeadm init --apiserver-advertise-address=<ip-address> --apiserver-cert-extra-sans "k8s.example.com,192.168.56.100,127.0.0.1" --control-plane-endpoint "k8s-api.example.com:6443" --pod-network-cidr=10.244.0.0/16"
-fi
+echo "If this is the first master node, run this command"
+echo "kubeadm init --apiserver-advertise-address=$node_ip --apiserver-cert-extra-sans "k8s.example.com,$node_ip" --control-plane-endpoint "k8s.example.com:6443" --pod-network-cidr=10.244.0.0/16"
