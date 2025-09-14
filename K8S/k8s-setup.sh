@@ -10,18 +10,6 @@
 
 NETWORK_INTERFACE=eth1
 
-ask_master_node() {
-    while true; do
-        read -p "Is this a master node? (Y/n): " yn
-        case $yn in
-            [Yy]* ) return 0;;
-            [Nn]* ) return 1;;
-            "" ) return 0;;
-            * ) echo "Please answer Y/y for yes or N/n for no.";;
-        esac
-    done
-}
-
 get_ip_from_iface() {
     local iface="$1"
 
@@ -43,9 +31,8 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 
-node_ip=get_ip_from_iface
-
-echo 'KUBELET_EXTRA_ARGS="--node-ip=$node_ip"' | sudo tee /etc/default/kubelet
+node_ip=$(get_ip_from_iface $NETWORK_INTERFACE)
+echo "KUBELET_EXTRA_ARGS=\"--node-ip=$node_ip\"" > /etc/default/kubelet
 
 apt-get update &&  apt -y upgrade
 apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release
