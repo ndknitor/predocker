@@ -70,5 +70,5 @@ systemctl restart containerd
 
 if [ "$is_master_node" = true ]; then
   echo "This script won't run init command because you should be the one who run it, just run this command and customize pod's CIDR as your requirments:"
-  echo "sudo kubeadm init --apiserver-advertise-address=<ip-address> --control-plane-endpoint "k8s-api.example.com:6443" --pod-network-cidr=10.244.0.0/16"
+  echo "sudo kubeadm init --apiserver-advertise-address=<ip-address> --apiserver-cert-extra-sans "k8s.example.com,192.168.56.100,127.0.0.1" --control-plane-endpoint "k8s-api.example.com:6443" --pod-network-cidr=10.244.0.0/16"
 fi
