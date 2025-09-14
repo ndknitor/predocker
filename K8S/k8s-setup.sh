@@ -9,6 +9,8 @@
 # Stop k8s service on node: kubeadm reset
 
 NETWORK_INTERFACE=eth1
+VIP=192.168.56.100
+SANS="192.168.56.100,192.168.56.101,192.168.56.102,192.168.56.103"
 
 get_ip_from_iface() {
     local iface="$1"
@@ -72,5 +74,8 @@ containerd config default |  tee /etc/containerd/config.toml
 sed -i 's/            SystemdCgroup = false/            SystemdCgroup = true/' /etc/containerd/config.toml
 systemctl restart containerd
 
-echo "If this is the first master node, run this command"
-echo "kubeadm init --apiserver-advertise-address=$node_ip --apiserver-cert-extra-sans "k8s.example.com,$node_ip" --control-plane-endpoint "k8s.example.com:6443" --pod-network-cidr=10.244.0.0/16"
+echo "If this is the first control plane node, run this command:"
+echo "kubeadm init --apiserver-advertise-address=$node_ip --apiserver-cert-extra-sans "$SANS" --control-plane-endpoint "$VIP:6443" --pod-network-cidr=10.244.0.0/16"
+
+echo "If this is a joining control plane node, run this command, get information from existing control plane node first:"
+kubeadm join :6443 --apiserver-advertise-address=$node_ip --token <token> --discovery-token-ca-cert-hash sha256:<hash> --control-plane --certificate-key <key>
