@@ -8,6 +8,7 @@
 # Delete node: kubectl delete node <node-name>
 # Stop k8s service on node: kubeadm reset
 
+MAX_PODS_PER_NODE=110
 NETWORK_INTERFACE=eth1
 VIP=192.168.56.100
 SANS="192.168.56.100,192.168.56.101,192.168.56.102,192.168.56.103"
@@ -53,7 +54,7 @@ apt-get update
 apt-get install -y kubeadm kubelet
 apt-mark hold kubeadm kubelet
 
-echo "KUBELET_EXTRA_ARGS=\"--node-ip=$node_ip\"" > /etc/default/kubelet
+echo "KUBELET_EXTRA_ARGS=\"--node-ip=$node_ip\" --max-pods=$MAX_PODS_PER_NODE" > /etc/default/kubelet
 
 cat <<EOF |  tee /etc/modules-load.d/k8s.conf
 overlay
@@ -78,4 +79,4 @@ echo "If this is the first control plane node, run this command:"
 echo "kubeadm init --apiserver-advertise-address=$node_ip --apiserver-cert-extra-sans "$SANS" --control-plane-endpoint "$VIP:6443" --pod-network-cidr=10.244.0.0/16"
 
 echo "If this is a joining control plane node, run this command, get information from existing control plane node first:"
-kubeadm join :6443 --apiserver-advertise-address=$node_ip --token <token> --discovery-token-ca-cert-hash sha256:<hash> --control-plane --certificate-key <key>
+echo "kubeadm join :6443 --apiserver-advertise-address=$node_ip --token <token> --discovery-token-ca-cert-hash sha256:<hash> --control-plane --certificate-key <key>"
