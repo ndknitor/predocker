@@ -8,10 +8,10 @@
 # Delete node: kubectl delete node <node-name>
 # Stop k8s service on node: kubeadm reset
 
-MAX_PODS_PER_NODE=110
 NETWORK_INTERFACE=eth1
 VIP=192.168.56.100
 SANS="192.168.56.100,192.168.56.101,192.168.56.102,192.168.56.103"
+MAX_PODS_PER_NODE=110
 
 get_ip_from_iface() {
     local iface="$1"
