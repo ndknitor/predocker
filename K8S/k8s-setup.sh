@@ -1,4 +1,4 @@
-# Apply Calico CNI: kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.0/manifests/calico.yaml
+# Apply Calico CNI: kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.30.3/manifests/calico.yaml
 # Print join command: kubeadm token create --print-join-command
 # Join worker: kubeadm join <ip>:6443 --token <token> --discovery-token-ca-cert-hash sha256:<hash>
 # Upload cert to get key: kubeadm init phase upload-certs --upload-certs
